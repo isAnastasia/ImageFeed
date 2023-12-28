@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class SingleImageViewController: UIViewController {
+final class SingleImageViewController: UIViewController {
     var image: UIImage!
     {
         didSet {
@@ -11,10 +11,10 @@ class SingleImageViewController: UIViewController {
         }
     }
     
-    @IBOutlet var backButton: UIButton!
-    @IBOutlet var shareButton: UIButton!
-    @IBOutlet var scrollView: UIScrollView!
-    @IBOutlet var imageView: UIImageView!
+    @IBOutlet private var backButton: UIButton!
+    @IBOutlet private var shareButton: UIButton!
+    @IBOutlet private var scrollView: UIScrollView!
+    @IBOutlet private var imageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
