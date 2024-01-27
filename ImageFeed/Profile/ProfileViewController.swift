@@ -1,6 +1,6 @@
 import UIKit
 
-class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController {
     
     private var imageView: UIImageView!
     private var nameLabel: UILabel!
