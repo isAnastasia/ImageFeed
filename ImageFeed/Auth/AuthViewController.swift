@@ -5,15 +5,15 @@ protocol AuthViewControllerDelegate: AnyObject {
 }
 
 final class AuthViewController: UIViewController {
-    private let ShowWebViewIdentifier = "ShowWebView"
+    private let showWebViewIdentifier = "ShowWebView"
     
     weak var delegate: AuthViewControllerDelegate?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowWebViewIdentifier {
+        if segue.identifier == showWebViewIdentifier {
             guard let viewController = segue.destination as? WebViewViewController
             else {
-                fatalError("Failed to prepare for \(ShowWebViewIdentifier)")
+                fatalError("Failed to prepare for \(showWebViewIdentifier)")
             }
             viewController.delegate = self
         } else {
@@ -31,5 +31,4 @@ extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
     }
-    
 }

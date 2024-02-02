@@ -4,6 +4,8 @@ final class OAuth2Service {
     static let shared = OAuth2Service()
     
     private let urlSession = URLSession.shared
+    private var lastTask: URLSessionTask?
+    private var lastCode: String?
     
     private (set) var authToken: String? {
         get {
@@ -18,51 +20,35 @@ final class OAuth2Service {
         _ code: String,
         completion: @escaping (Result<String, Error>) -> Void
     ) {
+        assert(Thread.isMainThread)
+        if lastCode == code { return }
+        lastTask?.cancel()
+        lastCode = code
+        
         let request = authTokenRequest(code: code)
-        let task = object(for: request) { [weak self] result in
+        
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self = self else { return}
             switch result {
             case .success(let body):
                 let authToken = body.accessToken
                 self.authToken = authToken
                 completion(.success(authToken))
+                
+                self.lastTask = nil
             case .failure(let err):
                 completion(.failure(err))
+                
+                self.lastCode = nil
             }
         }
         
+        self.lastTask = task
         task.resume()
     }
-    
 }
 
 extension OAuth2Service {
-    private func object(
-        for request: URLRequest,
-        completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void
-    ) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        return urlSession.data(for: request) { (result: Result<Data, Error>) in
-            let response = result.flatMap { data -> Result<OAuthTokenResponseBody, Error> in
-                Result { try decoder.decode(OAuthTokenResponseBody.self, from: data) }
-            }
-            completion(response)
-        }
-    }
-    
-    private func authTokenRequest(code: String) -> URLRequest {
-        URLRequest.makeHTTPRequest(
-            path: "/oauth/token"
-            + "?client_id=\(AccessKey)"
-            + "&&client_secret=\(SecretKey)"
-            + "&&redirect_uri=\(RedirectURI)"
-            + "&&code=\(code)"
-            + "&&grant_type=authorization_code",
-            httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!
-        )
-    }
-    
     private struct OAuthTokenResponseBody : Decodable {
         let accessToken: String
         let tokenType: String
@@ -76,7 +62,19 @@ extension OAuth2Service {
             case createdAt = "created_at"
         }
     }
-
+    
+    private func authTokenRequest(code: String) -> URLRequest {
+        URLRequest.makeHTTPRequest(
+            path: "/oauth/token"
+            + "?client_id=\(ApiConstants.accessKey)"
+            + "&&client_secret=\(ApiConstants.secretKey)"
+            + "&&redirect_uri=\(ApiConstants.redirectURI)"
+            + "&&code=\(code)"
+            + "&&grant_type=authorization_code",
+            httpMethod: "POST",
+            baseURL: URL(string: "https://unsplash.com")!
+        )
+    }
 }
 
 // MARK: - HTTP Request
@@ -85,7 +83,7 @@ extension URLRequest {
     static func makeHTTPRequest(
         path: String,
         httpMethod: String,
-        baseURL: URL = DefaultBaseURL
+        baseURL: URL = ApiConstants.defaultBaseURL
 ) -> URLRequest {
         var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.httpMethod = httpMethod
@@ -101,11 +99,11 @@ enum NetworkError: Error {
 }
 
 extension URLSession {
-    func data(
+    func objectTask<T: Decodable>(
         for request: URLRequest,
-        completion: @escaping (Result<Data, Error>) -> Void
+        completion: @escaping (Result<T, Error>) -> Void
     ) -> URLSessionTask {
-        let fulfillCompletion: (Result<Data, Error>) -> Void = { result in
+        let fulfillCompletion: (Result<T, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 completion(result)
             }
@@ -117,7 +115,16 @@ extension URLSession {
                let statusCode = (response as? HTTPURLResponse)?.statusCode
             {
                 if 200 ..< 300 ~= statusCode {
-                    fulfillCompletion(.success(data))
+                    let decoder = JSONDecoder()
+                    do {
+                        let object = try decoder.decode(
+                            T.self,
+                            from: data
+                        )
+                        fulfillCompletion(.success(object))
+                    } catch {
+                        fulfillCompletion(.failure(error))
+                    }
                 } else {
                     fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
                 }
