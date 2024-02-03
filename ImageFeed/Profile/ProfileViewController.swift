@@ -1,6 +1,9 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     
     private var imageView: UIImageView!
     private var nameLabel: UILabel!
@@ -8,14 +11,54 @@ final class ProfileViewController: UIViewController {
     private var descriptionLabel: UILabel!
     private var logOutButton: UIButton!
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .ypBlack
         setImageView()
         setNameLabel()
         setLoginLabel()
         setDescriptionLabel()
         setLogOutButton()
         
+        updateProfileDetails(profile: profileService.profile)
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.DidChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+        
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: url,
+                              placeholder: UIImage(named: "placeholder"),
+                              options: [.processor(processor)])
+        imageView.layer.cornerRadius = imageView.frame.height / 2
+        imageView.layer.masksToBounds = false
+        imageView.clipsToBounds = true
+    }
+    
+    private func updateProfileDetails(profile: Profile?) {
+        guard let profile = profile else { return }
+        nameLabel.text = profile.name
+        loginLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
     }
     
     private func setImageView() {

@@ -1,17 +1,14 @@
 import UIKit
 import WebKit
 
-fileprivate let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-
 protocol WebViewViewControllerDelegate: AnyObject {
-    // WebViewViewController получил код
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String)
     
-    //пользователь нажал кнопку назад и отменил авторизацию.
     func webViewViewControllerDidCancel(_ vc: WebViewViewController)
 }
 
 final class WebViewViewController: UIViewController {
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
     @IBOutlet private var webView: WKWebView!
     
@@ -22,14 +19,22 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+            options: [],
+            changeHandler: { [weak self] _, _ in
+                guard let self = self else { return }
+                self.updateProgress()
+            })
+        
         webView.navigationDelegate = self
         
-        var urlComponents = URLComponents(string: UnsplashAuthorizeURLString)!
+        var urlComponents = URLComponents(string: ApiConstants.unsplashAuthorizeURLString)!
         urlComponents.queryItems = [
-           URLQueryItem(name: "client_id", value: AccessKey),
-           URLQueryItem(name: "redirect_uri", value: RedirectURI),
-           URLQueryItem(name: "response_type", value: "code"),
-           URLQueryItem(name: "scope", value: AccessScope)
+            URLQueryItem(name: "client_id", value: ApiConstants.accessKey),
+            URLQueryItem(name: "redirect_uri", value: ApiConstants.redirectURI),
+            URLQueryItem(name: "response_type", value: "code"),
+            URLQueryItem(name: "scope", value: ApiConstants.accessScope)
          ]
         let url = urlComponents.url!
         
@@ -40,31 +45,11 @@ final class WebViewViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), context: nil)
-    }
-    
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
     }
 
     @IBAction private func didTapBackButton(_ sender: Any) {
