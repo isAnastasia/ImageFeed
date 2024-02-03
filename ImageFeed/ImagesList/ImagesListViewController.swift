@@ -116,4 +116,12 @@ extension ImagesListViewController {
 
         imageView.layer.addSublayer(gradientLayer)
     }
+    
+    func tableView(
+      _ tableView: UITableView,
+      willDisplay cell: UITableViewCell,
+      forRowAt indexPath: IndexPath
+    ) {
+        // ...
+    }
 }
