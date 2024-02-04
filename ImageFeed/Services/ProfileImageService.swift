@@ -1,8 +1,7 @@
 import Foundation
 
 final class ProfileImageService {
-    static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
-
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     static let shared = ProfileImageService()
     
     private (set) var avatarURL: String?
@@ -29,25 +28,14 @@ final class ProfileImageService {
             
                 NotificationCenter.default
                     .post(
-                        name: ProfileImageService.DidChangeNotification,
+                        name: ProfileImageService.didChangeNotification,
                         object: self,
                         userInfo: ["URL": smallImageUrl])
             case .failure(let error):
                 completion(.failure(error))
             }
-        }
-        
+        }        
         task.resume()
-    }    
-}
-
-extension ProfileImageService {
-    struct UserResult: Codable {
-        let profileImage: ProfileImage
-        
-        private enum CodingKeys: String, CodingKey {
-            case profileImage = "profile_image"
-        }
     }
     
     private func getImageInfoRequest( username: String, authToken: String) -> URLRequest {

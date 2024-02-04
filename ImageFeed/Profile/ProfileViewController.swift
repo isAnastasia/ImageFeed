@@ -1,4 +1,5 @@
 import UIKit
+import WebKit
 import Kingfisher
 
 final class ProfileViewController: UIViewController {
@@ -27,7 +28,7 @@ final class ProfileViewController: UIViewController {
         
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
-                forName: ProfileImageService.DidChangeNotification,
+                forName: ProfileImageService.didChangeNotification,
                 object: nil,
                 queue: .main
             ) { [weak self] _ in
@@ -47,7 +48,7 @@ final class ProfileViewController: UIViewController {
         let processor = RoundCornerImageProcessor(cornerRadius: 61)
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: url,
-                              placeholder: UIImage(named: "placeholder"),
+                              placeholder: UIImage(named: "userPicPlaceholder"),
                               options: [.processor(processor)])
         imageView.layer.cornerRadius = imageView.frame.height / 2
         imageView.layer.masksToBounds = false
@@ -68,10 +69,12 @@ final class ProfileViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
         
-        imageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
-        imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16).isActive = true
+        NSLayoutConstraint.activate([
+            imageView.widthAnchor.constraint(equalToConstant: 70),
+            imageView.heightAnchor.constraint(equalToConstant: 70),
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+        ])
     }
     
     private func setNameLabel() {
@@ -83,8 +86,10 @@ final class ProfileViewController: UIViewController {
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nameLabel)
         
-        nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8).isActive = true
-        nameLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor)
+        ])
     }
     
     private func setLoginLabel() {
@@ -96,8 +101,11 @@ final class ProfileViewController: UIViewController {
         loginLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(loginLabel)
         
-        loginLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor).isActive = true
-        loginLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8).isActive = true
+        NSLayoutConstraint.activate([
+            loginLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
+            loginLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8)
+        ])
+        
     }
     private func setDescriptionLabel() {
         descriptionLabel = UILabel()
@@ -108,8 +116,10 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(descriptionLabel)
         
-        descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor).isActive = true
-        descriptionLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 8).isActive = true
+        NSLayoutConstraint.activate([
+            descriptionLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 8)
+        ])
     }
     
     private func setLogOutButton() {
@@ -124,11 +134,39 @@ final class ProfileViewController: UIViewController {
         logOutButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(logOutButton)
         
-        logOutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor).isActive = true
-        logOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16).isActive = true
+        NSLayoutConstraint.activate([
+            logOutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            logOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
+        ])        
+    }
+    
+    private func showConfirmationAlert() {
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: "Да", style: .default, handler: { [weak self] (action: UIAlertAction!) in
+            guard let self = self else {return}
+            self.clean()
+            OAuth2TokenStorage.removeAuthToken()
+            
+            guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+            window.rootViewController = SplashViewController()
+            window.makeKeyAndVisible()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .cancel, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func clean() {
+       HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+       WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+          records.forEach { record in
+             WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+          }
+       }
     }
     
     @objc func didTapLogoutButton() {
-        print("button pressed")
+        showConfirmationAlert()
     }
 }
