@@ -8,6 +8,8 @@ final class ProfileImageService {
     private let oauth2TokenStorage = OAuth2TokenStorage()
     private let urlSession = URLSession.shared
     
+    private init() { }
+    
     func fetchProfileImageURL(
         username: String,
         _ completion: @escaping (Result<String, Error>) -> Void

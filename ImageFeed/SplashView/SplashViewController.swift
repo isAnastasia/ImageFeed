@@ -8,7 +8,7 @@ final class SplashViewController: UIViewController {
     private let showAuthenticationScreenIdentifier = "ShowAuthenticationScreen"
     
     private let profileService = ProfileService.shared
-    private let oauth2Service = OAuth2Service()
+    private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
@@ -45,7 +45,7 @@ final class SplashViewController: UIViewController {
             guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {return}
             authViewController.delegate = self
             authViewController.modalPresentationStyle = .fullScreen
-            self.present(authViewController, animated: true)
+            present(authViewController, animated: true)
         }
     }
     
@@ -68,7 +68,7 @@ final class SplashViewController: UIViewController {
     private func showErrorAlert() {
         let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 }
 

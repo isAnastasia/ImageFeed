@@ -51,10 +51,12 @@ final class SingleImageViewController: UIViewController {
     
     private func showError() {
         let alert = UIAlertController(title: "Ошибка", message: "Что-то пошло не так. Попробовать ещё раз?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Не надо", style: .cancel, handler: { (action: UIAlertAction!) in
+        alert.addAction(UIAlertAction(title: "Не надо", style: .cancel, handler: { [weak self] (action: UIAlertAction!) in
+            guard let self = self else {return}
             self.dismiss(animated: true)
         }))
-        alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { (action: UIAlertAction!) in
+        alert.addAction(UIAlertAction(title: "Повторить", style: .default, handler: { [weak self] (action: UIAlertAction!) in
+            guard let self = self else {return}
             self.setImage()
         }))
 

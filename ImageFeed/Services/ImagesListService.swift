@@ -10,6 +10,8 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     private var lastTask: URLSessionTask?
     
+    private init() { }
+    
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         assert(Thread.isMainThread)
         
