@@ -8,7 +8,7 @@ final class SplashViewController: UIViewController {
     private let showAuthenticationScreenIdentifier = "ShowAuthenticationScreen"
     
     private let profileService = ProfileService.shared
-    private let oauth2Service = OAuth2Service()
+    private let oauth2Service = OAuth2Service.shared
     private let oauth2TokenStorage = OAuth2TokenStorage()
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
@@ -29,8 +29,10 @@ final class SplashViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(imageView)
         
-        imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -43,7 +45,7 @@ final class SplashViewController: UIViewController {
             guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {return}
             authViewController.delegate = self
             authViewController.modalPresentationStyle = .fullScreen
-            self.present(authViewController, animated: true)
+            present(authViewController, animated: true)
         }
     }
     
@@ -66,7 +68,7 @@ final class SplashViewController: UIViewController {
     private func showErrorAlert() {
         let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -81,10 +83,7 @@ extension SplashViewController: AuthViewControllerDelegate {
     
     private func fetchOAuthToken(_ code: String) {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
-            guard let self = self
-            else {
-                return
-            }
+            guard let self = self else { return }
             
             switch result {
             case .success(let token):
@@ -92,7 +91,6 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 self.showErrorAlert()
-                break
             }
         }
     }
@@ -116,7 +114,6 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .failure:
                 UIBlockingProgressHUD.dismiss()
                 self.showErrorAlert()
-                break
             }
         }
     }

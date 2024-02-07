@@ -6,6 +6,8 @@ final class ProfileService {
     private let urlSession = URLSession.shared
     private(set) var profile: Profile?
     
+    private init() { }
+    
     func fetchProfile(
         _ authToken: String,
         completion: @escaping (Result<Profile, Error>) -> Void
@@ -30,22 +32,6 @@ final class ProfileService {
             }
         }
         task.resume()
-    }
-}
-
-extension ProfileService {
-    struct ProfileResult : Codable {
-        let username: String
-        let firstName: String
-        let lastName: String
-        let bio: String?
-        
-        private enum CodingKeys: String, CodingKey {
-            case username = "username"
-            case firstName = "first_name"
-            case lastName = "last_name"
-            case bio = "bio"
-        }
     }
     
     private func getBaseInfoRequest(authToken: String) -> URLRequest {
