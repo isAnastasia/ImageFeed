@@ -1,7 +1,14 @@
 import UIKit
 
-// TODO: - assertionfail
-final class ImagesListViewController: UIViewController {
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListPresenterProtocol? { get set }
+    
+    func updateTableViewAnimated()
+}
+
+final class ImagesListViewController: UIViewController & ImagesListViewControllerProtocol {
+    var presenter: ImagesListPresenterProtocol?
+    
     var photos: [Photo] = []
 
     @IBOutlet private var tableView: UITableView!
@@ -18,6 +25,8 @@ final class ImagesListViewController: UIViewController {
         super.viewDidLoad()
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         
+        presenter = ImagesListPresenter(view: self)
+        
         imageListServiceObserver = NotificationCenter.default.addObserver(
             forName: ImagesListService.didChangeNotification,
             object: nil,
@@ -26,7 +35,10 @@ final class ImagesListViewController: UIViewController {
             guard let self = self else { return }
             self.updateTableViewAnimated()
         }
-        imagesListService.fetchPhotosNextPage()
+        
+        // 1 ответственность - подгрузка фото для другой страницы
+        //imagesListService.fetchPhotosNextPage()
+        presenter?.fetchPhotos()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -40,7 +52,7 @@ final class ImagesListViewController: UIViewController {
         }
     }
     
-    private func updateTableViewAnimated() {
+    func updateTableViewAnimated() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
         photos = imagesListService.photos
@@ -55,7 +67,7 @@ final class ImagesListViewController: UIViewController {
         }
     }
     
-    private func showLikeErrorAlert() {
+    func showLikeErrorAlert() {
         let alert = UIAlertController(title: "Что-то пошло не так(", message: "Не удалось поставить лайк", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ок", style: .cancel, handler: nil))
         present(alert, animated: true, completion: nil)
@@ -162,12 +174,15 @@ extension ImagesListViewController {
       willDisplay cell: UITableViewCell,
       forRowAt indexPath: IndexPath
     ) {
+        // подгрузка фото
         if indexPath.row + 1 == imagesListService.photos.count {
-            imagesListService.fetchPhotosNextPage()
+            //imagesListService.fetchPhotosNextPage()
+            presenter?.fetchPhotos()
         }
     }
 }
 
+// 2 ответственность - нажал лайк - связь с сервером
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
@@ -189,4 +204,5 @@ extension ImagesListViewController: ImagesListCellDelegate {
             }
         }
     }
+    
 }

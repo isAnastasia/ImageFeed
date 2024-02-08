@@ -15,7 +15,7 @@ final class WebViewTests: XCTestCase {
         _ = viewController.view
         
         //then
-        XCTAssertTrue(presenter.viewDidLoadCalled) //behaviour verification
+        XCTAssertTrue(presenter.viewDidLoadCalled)
     }
     
     //вызывает ли презентер после вызова presenter.viewDidLoad() метод loadRequest вьюконтроллера.

@@ -2,11 +2,42 @@ import UIKit
 import WebKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfilePresenterProtocol? {get set}
+    func updateProfileDetails(profile: Profile)
+    //func updateAvatar()
+    
+    func setAvatar(url: URL)
+}
+
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
+    func setAvatar(url: URL) {
+        presenter?.downloadAvatar(imageView: avatarImageView, url: url)
+        
+        avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2
+        avatarImageView.layer.masksToBounds = false
+        avatarImageView.clipsToBounds = true
+    }
+    
+//    func updateAvatar() {
+//        avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2
+//        avatarImageView.layer.masksToBounds = false
+//        avatarImageView.clipsToBounds = true
+//    }
+    
+    func updateProfileDetails(profile: Profile) {
+        nameLabel.text = profile.name
+        loginLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
+    }
+    
+    var presenter: ProfilePresenterProtocol?
+    
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
     
-    private var imageView: UIImageView!
+    //private var imageView: UIImageView!
+    private var avatarImageView: UIImageView = UIImageView()
     private var nameLabel: UILabel!
     private var loginLabel: UILabel!
     private var descriptionLabel: UILabel!
@@ -24,7 +55,9 @@ final class ProfileViewController: UIViewController {
         setDescriptionLabel()
         setLogOutButton()
         
-        updateProfileDetails(profile: profileService.profile)
+        //!!!!!!!!!!!!!!!!!!!
+        //updateProfileDetails(profile: profileService.profile)
+        presenter?.downloadProfileDetails()
         
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
@@ -33,47 +66,59 @@ final class ProfileViewController: UIViewController {
                 queue: .main
             ) { [weak self] _ in
                 guard let self = self else { return }
-                self.updateAvatar()
+                //self.updateAvatar()
+                
+                //self.presenter?.downloadAvatar(imageView: self.avatarImageView)
+                self.presenter?.updateAvatar()
             }
-        updateAvatar()
+        //updateAvatar()
+        //presenter?.downloadAvatar(imageView: avatarImageView)
+        presenter?.updateAvatar()
         
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
-        
-        let processor = RoundCornerImageProcessor(cornerRadius: 61)
-        imageView.kf.indicatorType = .activity
-        imageView.kf.setImage(with: url,
-                              placeholder: UIImage(named: "userPicPlaceholder"),
-                              options: [.processor(processor)])
-        imageView.layer.cornerRadius = imageView.frame.height / 2
-        imageView.layer.masksToBounds = false
-        imageView.clipsToBounds = true
-    }
+    // 1 ответственность - подгрузка фото из сети
+//    func updateAvatar() {
+//        guard
+//            let profileImageURL = ProfileImageService.shared.avatarURL,
+//            let url = URL(string: profileImageURL)
+//        else { return }
+//
+//        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+//        imageView.kf.indicatorType = .activity
+//        imageView.kf.setImage(with: url,
+//                              placeholder: UIImage(named: "userPicPlaceholder"),
+//                              options: [.processor(processor)])
+//        // это оставляем здесь
+//        imageView.layer.cornerRadius = imageView.frame.height / 2
+//        imageView.layer.masksToBounds = false
+//        imageView.clipsToBounds = true
+//    }
     
-    private func updateProfileDetails(profile: Profile?) {
-        guard let profile = profile else { return }
-        nameLabel.text = profile.name
-        loginLabel.text = profile.loginName
-        descriptionLabel.text = profile.bio
-    }
+    // 2 ответственность - получение профиля из ПрофильСервис
+//    private func updateProfileDetails(profile: Profile?) {
+//        // перенести
+//        guard let profile = profile else { return }
+//        // оставляем здесь
+//        nameLabel.text = profile.name
+//        loginLabel.text = profile.loginName
+//        descriptionLabel.text = profile.bio
+//    }
+    
     
     private func setImageView() {
         let image = UIImage(named: "Avatar")
-        imageView = UIImageView(image: image)
+        avatarImageView = UIImageView(image: image)
+        //imageView.image = image
         
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(imageView)
+        avatarImageView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(avatarImageView)
         
         NSLayoutConstraint.activate([
-            imageView.widthAnchor.constraint(equalToConstant: 70),
-            imageView.heightAnchor.constraint(equalToConstant: 70),
-            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
-            imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
+            avatarImageView.widthAnchor.constraint(equalToConstant: 70),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 70),
+            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            avatarImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16)
         ])
     }
     
@@ -87,8 +132,8 @@ final class ProfileViewController: UIViewController {
         view.addSubview(nameLabel)
         
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-            nameLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor)
+            nameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor)
         ])
     }
     
@@ -102,7 +147,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(loginLabel)
         
         NSLayoutConstraint.activate([
-            loginLabel.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
+            loginLabel.leadingAnchor.constraint(equalTo: avatarImageView.leadingAnchor),
             loginLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8)
         ])
         
@@ -135,7 +180,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(logOutButton)
         
         NSLayoutConstraint.activate([
-            logOutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            logOutButton.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
             logOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16)
         ])        
     }
@@ -145,8 +190,9 @@ final class ProfileViewController: UIViewController {
 
         alert.addAction(UIAlertAction(title: "Да", style: .default, handler: { [weak self] (action: UIAlertAction!) in
             guard let self = self else {return}
-            self.clean()
-            OAuth2TokenStorage.removeAuthToken()
+//            self.clean()
+//            OAuth2TokenStorage.removeAuthToken()
+            Cleaner.clean()
             
             guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
             window.rootViewController = SplashViewController()
@@ -157,14 +203,15 @@ final class ProfileViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    private func clean() {
-       HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-       WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-          records.forEach { record in
-             WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-          }
-       }
-    }
+    // 3 ответсвенность - очистка
+//    private func clean() {
+//       HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+//       WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+//          records.forEach { record in
+//             WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+//          }
+//       }
+//    }
     
     @objc func didTapLogoutButton() {
         showConfirmationAlert()

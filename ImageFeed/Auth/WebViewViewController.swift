@@ -26,6 +26,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
     
     func load(request: URLRequest) {
         webView.load(request)
+        webView.accessibilityIdentifier = "UnsplashWebView"
     }
     
     override func viewDidLoad() {

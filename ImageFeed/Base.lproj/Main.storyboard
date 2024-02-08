@@ -115,9 +115,10 @@
                                     <constraint firstAttribute="height" constant="60" id="TK5-jf-Iqo"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ss3-Bf-hDo">
+                            <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="Authenticate" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ss3-Bf-hDo">
                                 <rect key="frame" x="16" y="724" width="382" height="48"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <accessibility key="accessibilityConfiguration" identifier="Authenticate"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="JxL-w1-WDP"/>
                                 </constraints>
@@ -148,7 +149,10 @@
                             <constraint firstItem="uwd-Op-XR9" firstAttribute="bottom" secondItem="ss3-Bf-hDo" secondAttribute="bottom" constant="90" id="hef-qX-AlP"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="ymm-fM-Ip3"/>
+                    <navigationItem key="navigationItem" id="JhK-E4-J1c"/>
+                    <connections>
+                        <outlet property="loginButton" destination="ss3-Bf-hDo" id="w2N-B2-3fH"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LbQ-Ey-rFq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
