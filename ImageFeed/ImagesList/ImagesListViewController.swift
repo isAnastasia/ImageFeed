@@ -36,8 +36,6 @@ final class ImagesListViewController: UIViewController & ImagesListViewControlle
             self.updateTableViewAnimated()
         }
         
-        // 1 ответственность - подгрузка фото для другой страницы
-        //imagesListService.fetchPhotosNextPage()
         presenter?.fetchPhotos()
     }
     

@@ -54,8 +54,9 @@
                                     <outlet property="delegate" destination="wdK-X5-cRB" id="a5m-WO-NS4"/>
                                 </connections>
                             </scrollView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DTA-s7-zyX" userLabel="BackButton">
+                            <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="nav back button" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DTA-s7-zyX" userLabel="BackButton">
                                 <rect key="frame" x="8" y="56" width="48" height="48"/>
+                                <accessibility key="accessibilityConfiguration" identifier="nav back button"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="J1Y-7v-Oyn"/>
                                     <constraint firstAttribute="width" constant="48" id="Vqb-6M-3b2"/>
@@ -239,8 +240,9 @@
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nvP-TI-cOB" userLabel="LikeButton">
+                                                <button opaque="NO" contentMode="scaleToFill" restorationIdentifier="like button" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nvP-TI-cOB" userLabel="LikeButton">
                                                     <rect key="frame" x="344" y="4" width="54" height="42"/>
+                                                    <accessibility key="accessibilityConfiguration" identifier="like button"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" image="likeButtonOn"/>
                                                     <buttonConfiguration key="configuration" style="plain" image="likeButtonOn"/>

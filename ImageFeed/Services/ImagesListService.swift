@@ -1,6 +1,9 @@
 import Foundation
-
-final class ImagesListService {
+public protocol ImagesListServiceProtocol {
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+    func fetchPhotosNextPage()
+}
+final class ImagesListService: ImagesListServiceProtocol {
     static let shared = ImagesListService()
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     

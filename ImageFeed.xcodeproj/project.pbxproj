@@ -30,6 +30,13 @@
 		3382C7332B6CE43300EA9C18 /* ProfileStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3382C7322B6CE43300EA9C18 /* ProfileStruct.swift */; };
 		3382C7352B6CE4AD00EA9C18 /* ProfileImageStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3382C7342B6CE4AD00EA9C18 /* ProfileImageStruct.swift */; };
 		3382C7372B6E4C4600EA9C18 /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3382C7362B6E4C4600EA9C18 /* ImagesListService.swift */; };
+		3396C8532B74FE8E00429170 /* ProfilePresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3396C8522B74FE8E00429170 /* ProfilePresenterSpy.swift */; };
+		3396C8552B74FF0300429170 /* ProfileViewControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3396C8542B74FF0300429170 /* ProfileViewControllerMock.swift */; };
+		3396C8572B7505AA00429170 /* ProfileViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3396C8562B7505AA00429170 /* ProfileViewControllerSpy.swift */; };
+		3396C85C2B75422D00429170 /* ImagesListViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3396C85B2B75422D00429170 /* ImagesListViewControllerSpy.swift */; };
+		3396C85E2B75425200429170 /* ImagesListServiceSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3396C85D2B75425200429170 /* ImagesListServiceSpy.swift */; };
+		3396C8602B75427C00429170 /* ImagesListPresenterMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3396C85F2B75427C00429170 /* ImagesListPresenterMock.swift */; };
+		3396C8622B7542A700429170 /* ImagesListPresenterSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3396C8612B7542A700429170 /* ImagesListPresenterSpy.swift */; };
 		33C2AF9E2B67C2F100B16D95 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C2AF9D2B67C2F100B16D95 /* UIBlockingProgressHUD.swift */; };
 		33C2AFA02B67D4D500B16D95 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33C2AF9F2B67D4D400B16D95 /* ProfileService.swift */; };
 		33F4F6EA2B702D2E00383D00 /* DateFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F4F6E92B702D2E00383D00 /* DateFormatters.swift */; };
@@ -96,6 +103,13 @@
 		3382C7322B6CE43300EA9C18 /* ProfileStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileStruct.swift; sourceTree = "<group>"; };
 		3382C7342B6CE4AD00EA9C18 /* ProfileImageStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageStruct.swift; sourceTree = "<group>"; };
 		3382C7362B6E4C4600EA9C18 /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
+		3396C8522B74FE8E00429170 /* ProfilePresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePresenterSpy.swift; sourceTree = "<group>"; };
+		3396C8542B74FF0300429170 /* ProfileViewControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewControllerMock.swift; sourceTree = "<group>"; };
+		3396C8562B7505AA00429170 /* ProfileViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewControllerSpy.swift; sourceTree = "<group>"; };
+		3396C85B2B75422D00429170 /* ImagesListViewControllerSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListViewControllerSpy.swift; sourceTree = "<group>"; };
+		3396C85D2B75425200429170 /* ImagesListServiceSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListServiceSpy.swift; sourceTree = "<group>"; };
+		3396C85F2B75427C00429170 /* ImagesListPresenterMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenterMock.swift; sourceTree = "<group>"; };
+		3396C8612B7542A700429170 /* ImagesListPresenterSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListPresenterSpy.swift; sourceTree = "<group>"; };
 		33C2AF9D2B67C2F100B16D95 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		33C2AF9F2B67D4D400B16D95 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		33F4F6E92B702D2E00383D00 /* DateFormatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatters.swift; sourceTree = "<group>"; };
@@ -204,7 +218,6 @@
 				330E5DB92AF82AA0002A29E0 /* Info.plist */,
 				33C2AF9D2B67C2F100B16D95 /* UIBlockingProgressHUD.swift */,
 				3382C72F2B6C395D00EA9C18 /* TabBarController.swift */,
-				33F4F7172B74094100383D00 /* Cleaner.swift */,
 			);
 			path = ImageFeed;
 			sourceTree = "<group>";
@@ -260,6 +273,39 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		3396C8582B75339B00429170 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				33F4F7112B73BECD00383D00 /* WebViewViewControllerSpy.swift */,
+				33F4F70F2B73BC4500383D00 /* WebViewPresenterSpy.swift */,
+				33F4F7082B73B87100383D00 /* WebViewTests.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
+		3396C8592B7533B200429170 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				33F4F7152B73E70B00383D00 /* ProfileViewTests.swift */,
+				3396C8522B74FE8E00429170 /* ProfilePresenterSpy.swift */,
+				3396C8542B74FF0300429170 /* ProfileViewControllerMock.swift */,
+				3396C8562B7505AA00429170 /* ProfileViewControllerSpy.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		3396C85A2B7533D200429170 /* ImagesList */ = {
+			isa = PBXGroup;
+			children = (
+				33F4F71B2B741D5C00383D00 /* ImagesListViewTests.swift */,
+				3396C85B2B75422D00429170 /* ImagesListViewControllerSpy.swift */,
+				3396C85D2B75425200429170 /* ImagesListServiceSpy.swift */,
+				3396C85F2B75427C00429170 /* ImagesListPresenterMock.swift */,
+				3396C8612B7542A700429170 /* ImagesListPresenterSpy.swift */,
+			);
+			path = ImagesList;
+			sourceTree = "<group>";
+		};
 		33CE46D12B3E076D00AF0DC2 /* SplashView */ = {
 			isa = PBXGroup;
 			children = (
@@ -282,11 +328,9 @@
 		33F4F7072B73B87100383D00 /* ImageFeedTests */ = {
 			isa = PBXGroup;
 			children = (
-				33F4F7082B73B87100383D00 /* WebViewTests.swift */,
-				33F4F70F2B73BC4500383D00 /* WebViewPresenterSpy.swift */,
-				33F4F7112B73BECD00383D00 /* WebViewViewControllerSpy.swift */,
-				33F4F7152B73E70B00383D00 /* ProfileViewTests.swift */,
-				33F4F71B2B741D5C00383D00 /* ImagesListViewTests.swift */,
+				3396C85A2B7533D200429170 /* ImagesList */,
+				3396C8592B7533B200429170 /* Profile */,
+				3396C8582B75339B00429170 /* WebView */,
 			);
 			path = ImageFeedTests;
 			sourceTree = "<group>";
@@ -302,6 +346,7 @@
 		33FC841B2B03BDC9009753C3 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				33F4F7172B74094100383D00 /* Cleaner.swift */,
 				33FC841C2B03BDF0009753C3 /* UIColor+Extensions.swift */,
 				33F4F6E92B702D2E00383D00 /* DateFormatters.swift */,
 				33F4F6F62B70468C00383D00 /* URLSession+extension.swift */,
@@ -497,7 +542,14 @@
 				33F4F7092B73B87100383D00 /* WebViewTests.swift in Sources */,
 				33F4F7122B73BECD00383D00 /* WebViewViewControllerSpy.swift in Sources */,
 				33F4F71C2B741D5C00383D00 /* ImagesListViewTests.swift in Sources */,
+				3396C85C2B75422D00429170 /* ImagesListViewControllerSpy.swift in Sources */,
+				3396C8622B7542A700429170 /* ImagesListPresenterSpy.swift in Sources */,
+				3396C8552B74FF0300429170 /* ProfileViewControllerMock.swift in Sources */,
+				3396C85E2B75425200429170 /* ImagesListServiceSpy.swift in Sources */,
+				3396C8572B7505AA00429170 /* ProfileViewControllerSpy.swift in Sources */,
+				3396C8602B75427C00429170 /* ImagesListPresenterMock.swift in Sources */,
 				33F4F7102B73BC4500383D00 /* WebViewPresenterSpy.swift in Sources */,
+				3396C8532B74FE8E00429170 /* ProfilePresenterSpy.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
