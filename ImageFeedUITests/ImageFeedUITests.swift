@@ -1,6 +1,10 @@
 import XCTest
 
 final class ImageFeedUITests: XCTestCase {
+    private let email: String = ""
+    private let password: String = ""
+    private let fullName: String = ""
+    private let username: String = ""
 
     private let app = XCUIApplication()
         
@@ -13,7 +17,6 @@ final class ImageFeedUITests: XCTestCase {
 
         sleep(5)
         app.buttons["Authenticate"].tap()
-        print(1)
         let webView = app.webViews["UnsplashWebView"]
 
         XCTAssertTrue(webView.waitForExistence(timeout: 5))
@@ -22,9 +25,8 @@ final class ImageFeedUITests: XCTestCase {
         let loginTextField = webView.descendants(matching: .textField).element
         
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
-        print(4)
         loginTextField.tap()
-        loginTextField.typeText("nasty04012003@gmail.com")
+        loginTextField.typeText(email)
         webView.tap()
         webView.swipeUp()
 
@@ -32,7 +34,7 @@ final class ImageFeedUITests: XCTestCase {
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
 
         passwordTextField.tap()
-        passwordTextField.typeText("necktie_3567")
+        passwordTextField.typeText(password)
         webView.swipeUp()
 
         webView.buttons["Login"].tap()
@@ -80,8 +82,8 @@ final class ImageFeedUITests: XCTestCase {
         sleep(5)
         app.tabBars.buttons.element(boundBy: 1).tap()
 
-        XCTAssertTrue(app.staticTexts["Anastasia Gorbunova"].exists)
-        XCTAssertTrue(app.staticTexts["@isanastasia"].exists)
+        XCTAssertTrue(app.staticTexts["\(fullName)"].exists)
+        XCTAssertTrue(app.staticTexts["\(username)"].exists)
 
         app.buttons["logout button"].tap()
 
