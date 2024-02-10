@@ -164,5 +164,4 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     @objc func didTapLogoutButton() {
         showConfirmationAlert()
     }
-    
 }

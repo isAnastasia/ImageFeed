@@ -1,10 +1,10 @@
 import XCTest
 
 final class ImageFeedUITests: XCTestCase {
-    private let email: String = ""
-    private let password: String = ""
-    private let fullName: String = ""
-    private let username: String = ""
+    private let email: String = "nasty04012003@gmail.com"
+    private let password: String = "necktie_3567"
+    private let fullName: String = "Anastasia Gorbunova"
+    private let username: String = "@isanastasia"
 
     private let app = XCUIApplication()
         
@@ -27,7 +27,9 @@ final class ImageFeedUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         loginTextField.tap()
         loginTextField.typeText(email)
-        webView.tap()
+        
+        let doneButton = app.toolbars.buttons["Done"]
+        doneButton.tap()
         webView.swipeUp()
 
         let passwordTextField = webView.descendants(matching: .secureTextField).element

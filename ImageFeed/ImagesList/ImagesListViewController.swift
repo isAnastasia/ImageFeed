@@ -202,5 +202,4 @@ extension ImagesListViewController: ImagesListCellDelegate {
             }
         }
     }
-    
 }

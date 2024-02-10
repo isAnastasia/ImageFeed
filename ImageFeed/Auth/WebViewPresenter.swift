@@ -8,18 +8,14 @@ public protocol WebViewPresenterProtocol {
 }
 
 final class WebViewPresenter: WebViewPresenterProtocol {
+    weak var view: WebViewViewControllerProtocol?
+    var authHelper: AuthHelperProtocol
+    
+    init(authHelper: AuthHelperProtocol) {
+        self.authHelper = authHelper
+    }
+    
     func code(from url: URL) -> String? {
-//        if
-//            //let url = navigationAction.request.url,
-//            let urlComponents = URLComponents(string: url.absoluteString),
-//            urlComponents.path == "/oauth/authorize/native",
-//            let items = urlComponents.queryItems,
-//            let codeItem = items.first(where: { $0.name == "code" })
-//        {
-//            return codeItem.value
-//        } else {
-//            return nil
-//        }
         authHelper.code(from: url)
     }
     
@@ -38,23 +34,5 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     func viewDidLoad() {
         let request = authHelper.authRequest()
         view?.load(request: request)
-        
-//        var urlComponents = URLComponents(string: ApiConstants.unsplashAuthorizeURLString)!
-//        urlComponents.queryItems = [
-//            URLQueryItem(name: "client_id", value: ApiConstants.accessKey),
-//            URLQueryItem(name: "redirect_uri", value: ApiConstants.redirectURI),
-//            URLQueryItem(name: "response_type", value: "code"),
-//            URLQueryItem(name: "scope", value: ApiConstants.accessScope)
-//         ]
-//        let url = urlComponents.url!
-//
-//        let request = URLRequest(url: url)
-//        view?.load(request: request)
-    }
-    
-    weak var view: WebViewViewControllerProtocol?
-    var authHelper: AuthHelperProtocol
-    init(authHelper: AuthHelperProtocol) {
-        self.authHelper = authHelper
     }
 }
