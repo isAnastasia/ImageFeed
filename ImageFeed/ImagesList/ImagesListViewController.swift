@@ -172,15 +172,12 @@ extension ImagesListViewController {
       willDisplay cell: UITableViewCell,
       forRowAt indexPath: IndexPath
     ) {
-        // подгрузка фото
         if indexPath.row + 1 == imagesListService.photos.count {
-            //imagesListService.fetchPhotosNextPage()
             presenter?.fetchPhotos()
         }
     }
 }
 
-// 2 ответственность - нажал лайк - связь с сервером
 extension ImagesListViewController: ImagesListCellDelegate {
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }

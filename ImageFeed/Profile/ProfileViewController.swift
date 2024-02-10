@@ -51,7 +51,12 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     
     //MARK: - ProfileViewControllerProtocol
     func setAvatar(url: URL) {
-        presenter?.downloadAvatar(imageView: avatarImageView, url: url)
+        let processor = RoundCornerImageProcessor(cornerRadius: 61)
+        
+        avatarImageView.kf.indicatorType = .activity
+        avatarImageView.kf.setImage(with: url,
+                                    placeholder: UIImage(named: "userPicPlaceholder"),
+                                    options: [.processor(processor)])
         
         avatarImageView.layer.cornerRadius = avatarImageView.frame.height / 2
         avatarImageView.layer.masksToBounds = false
@@ -68,7 +73,6 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     private func setImageView() {
         let image = UIImage(named: "Avatar")
         avatarImageView = UIImageView(image: image)
-        //imageView.image = image
         
         avatarImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(avatarImageView)

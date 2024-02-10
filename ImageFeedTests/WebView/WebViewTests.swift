@@ -18,7 +18,6 @@ final class WebViewTests: XCTestCase {
         XCTAssertTrue(presenter.viewDidLoadCalled)
     }
     
-    //вызывает ли презентер после вызова presenter.viewDidLoad() метод loadRequest вьюконтроллера.
     func testPresenterCallsLoadRequest() {
         //given
         let viewController = WebViewViewControllerSpy()
@@ -78,7 +77,6 @@ final class WebViewTests: XCTestCase {
         XCTAssertTrue(urlString.contains(configuration.accessScope))
     }
     
-    //проверить, что AuthHelper корректно распознаёт код из ссылки
     func testCodeFromURL() {
         //given
         var urlComponents = URLComponents(string: "https://unsplash.com/oauth/authorize/native")!
@@ -91,7 +89,6 @@ final class WebViewTests: XCTestCase {
             
         //then
         XCTAssertEqual(code, "test code")
-        
     }
 }
 

@@ -28,7 +28,6 @@ final class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {

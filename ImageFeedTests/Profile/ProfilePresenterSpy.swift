@@ -1,6 +1,5 @@
 import Foundation
 import ImageFeed
-import UIKit
 
 final class ProfilePresenterSpy: ProfilePresenterProtocol {
     var view: ImageFeed.ProfileViewControllerProtocol?
@@ -15,7 +14,4 @@ final class ProfilePresenterSpy: ProfilePresenterProtocol {
         updateAvatarWasCalled = true
     }
     
-    func downloadAvatar(imageView: UIImageView, url: URL) {
-        
-    }
 }

@@ -65,7 +65,6 @@ final class ProfileViewTests: XCTestCase {
         viewController.presenter = presenter
         presenter.view = viewController
         
-        let imageView = UIImageView()
         let url = ApiConstants.defaultBaseURL
         
         //when
