@@ -5,6 +5,8 @@ protocol AuthViewControllerDelegate: AnyObject {
 }
 
 final class AuthViewController: UIViewController {
+    
+    @IBOutlet private weak var loginButton: UIButton!
     private let showWebViewIdentifier = "ShowWebView"
     
     weak var delegate: AuthViewControllerDelegate?
@@ -15,12 +17,17 @@ final class AuthViewController: UIViewController {
             else {
                 fatalError("Failed to prepare for \(showWebViewIdentifier)")
             }
+            
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+            viewController.presenter = webViewPresenter
+            webViewPresenter.view = viewController                    
+            
             viewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
     }
-    
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
